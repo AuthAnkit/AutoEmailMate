@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/user")
 
 public class UserController {
-    private  final EmailService emailService;
     private final UserService userService;
 
     @GetMapping("/greet")
@@ -33,12 +32,5 @@ public class UserController {
         String loginMessage = userService.login(userLoginReq);
         return ResponseEntity.ok(loginMessage);
     }
-
-    @PostMapping("/send-mail")
-    public ResponseEntity<String> sendMail(@RequestBody EmailRequest emailRequest) {
-        String mess = emailService.sendEmail(emailRequest.getTo(), emailRequest.getSubject(), emailRequest.getMessage());
-        return ResponseEntity.ok(mess);
-    }
-
 
 }
