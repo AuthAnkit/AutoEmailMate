@@ -4,6 +4,7 @@ import com.AutoEmailMate.eg.Config.PassWordEncoder;
 import com.AutoEmailMate.eg.DTO.request.UserLoginReq;
 import com.AutoEmailMate.eg.DTO.request.UserRegisterReq;
 import com.AutoEmailMate.eg.Exceptions.EmailAlreadyExists;
+import com.AutoEmailMate.eg.Exceptions.IncorrectPassWord;
 import com.AutoEmailMate.eg.Exceptions.UserNameAlreadyExists;
 import com.AutoEmailMate.eg.Model.User;
 import com.AutoEmailMate.eg.Repository.UserRepo;
@@ -25,9 +26,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public String registerUser(UserRegisterReq userRegisterReq) {
         if(userRepo.findByUsername(userRegisterReq.getUsername()).isPresent())
-            throw new UserNameAlreadyExists();
+            throw new UserNameAlreadyExists("UserName Already Exists , Choose Other UserName");
         else if(userRepo.findByEmail(userRegisterReq.getEmail()).isPresent())
-            throw new EmailAlreadyExists();
+            throw new EmailAlreadyExists("\"Email Already Exists . LogIn with username and password OR Register with another Account\"");
         User newuser = UserTransformer.toEntity(userRegisterReq);
         newuser.setPassword(passwordEncoder.encode(userRegisterReq.getPassword()));
         userRepo.save(newuser);
@@ -38,10 +39,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public String login(UserLoginReq userLoginReq) {
         if(userRepo.findByUsername(userLoginReq.getUsername()).isPresent()){
-            if(passwordEncoder.matches(userLoginReq.getPassword(), userLoginReq.getPassword())){
+            User user = userRepo.findByUsername(userLoginReq.getUsername()).get();
+            if(passwordEncoder.matches(userLoginReq.getPassword(), user.getPassword())){
                 return "User logged in successfully with username: " + userLoginReq.getUsername();
             }
         }
-        throw new RuntimeException("Invalid username or password");
+        throw new IncorrectPassWord("Incorrect Password");
     }
 }

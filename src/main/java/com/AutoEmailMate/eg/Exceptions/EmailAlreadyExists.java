@@ -1,7 +1,9 @@
 package com.AutoEmailMate.eg.Exceptions;
 
+import org.aspectj.bridge.IMessage;
+
 public class EmailAlreadyExists extends RuntimeException {
-    public EmailAlreadyExists() {
-        super("Email Already Exists . LogIn with username and password OR Register with another Account");
+    public EmailAlreadyExists(String message) {
+        super(message);
     }
 }
