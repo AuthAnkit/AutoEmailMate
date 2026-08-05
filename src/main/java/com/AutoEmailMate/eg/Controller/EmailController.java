@@ -1,7 +1,9 @@
 package com.AutoEmailMate.eg.Controller;
 
+import com.AutoEmailMate.eg.DTO.RecuriterDTO;
 import com.AutoEmailMate.eg.DTO.request.EmailRequest;
 import com.AutoEmailMate.eg.Service.EmailService;
+import com.AutoEmailMate.eg.Service.ServiceImpl.BulkEmailSenderService;
 import com.AutoEmailMate.eg.Util.CSVReader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +19,7 @@ import java.util.List;
 public class EmailController {
     private final EmailService emailService;
     private final CSVReader csvReader;
+    private  final BulkEmailSenderService  bulkEmailSenderService;
     @PostMapping("/upload-csv")
     public ResponseEntity<List<String>> uploadCsv(@RequestParam("file") MultipartFile file) throws Exception {
         List<String> emails = csvReader.readEmails(file);
@@ -36,5 +39,14 @@ public class EmailController {
                                              @RequestParam("file") MultipartFile file) throws Exception {
         String mess = emailService.sendEmailWithAttachment(to, subject, message, file);
         return ResponseEntity.ok(mess);
+    }
+
+    @PostMapping("/send-bulk")
+    public ResponseEntity<String> sendBulk(@RequestParam("csv")  MultipartFile file,
+                                             @RequestParam("resume") MultipartFile resume,
+                                             @RequestParam("subject") String subject
+    ) throws Exception {
+        String response = bulkEmailSenderService.SendBulkEmails(file,resume,subject);
+        return ResponseEntity.ok(response);
     }
 }
