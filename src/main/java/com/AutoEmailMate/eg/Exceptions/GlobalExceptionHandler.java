@@ -20,5 +20,6 @@ public class GlobalExceptionHandler {
         @ExceptionHandler(IncorrectPassWord.class)
     public ResponseEntity<String> handleIncorrectPassWord(IncorrectPassWord ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
-    }}
+    }
+}
 

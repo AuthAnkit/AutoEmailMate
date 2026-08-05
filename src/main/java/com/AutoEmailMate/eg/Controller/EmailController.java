@@ -28,4 +28,13 @@ public class EmailController {
         String mess = emailService.sendEmail(emailRequest.getTo(), emailRequest.getSubject(), emailRequest.getMessage());
         return ResponseEntity.ok(mess);
     }
+
+    @PostMapping("/send-mail-with-attachment")
+    public ResponseEntity<String> sendMailWithAttachment(@RequestParam("to") String to,
+                                             @RequestParam("subject") String subject,
+                                             @RequestParam("message") String message,
+                                             @RequestParam("file") MultipartFile file) throws Exception {
+        String mess = emailService.sendEmailWithAttachment(to, subject, message, file);
+        return ResponseEntity.ok(mess);
+    }
 }
