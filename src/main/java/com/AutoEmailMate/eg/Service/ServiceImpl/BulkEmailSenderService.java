@@ -23,4 +23,14 @@ public class BulkEmailSenderService {
         }
         return "Bulk Email Sent Successfully";
     }
+
+    public String SendBulkEmailsWithoutDetails(MultipartFile csv , MultipartFile resume , String subject) throws Exception{
+        List<RecuriterDTO> list = csvService.readCsvFile(csv);
+        for( RecuriterDTO recuriter : list ){
+            String personalizedMessage = messageGeneratorService.GenMessWithoutDetails();
+            emailService.sendEmailWithAttachment(recuriter.getEmail(),subject,personalizedMessage,resume);
+        }
+        return "Bulk Email Sent Successfully";
+    }
+
 }

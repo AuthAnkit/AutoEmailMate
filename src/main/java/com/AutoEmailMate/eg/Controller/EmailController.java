@@ -49,4 +49,15 @@ public class EmailController {
         String response = bulkEmailSenderService.SendBulkEmails(file,resume,subject);
         return ResponseEntity.ok(response);
     }
+
+    @PostMapping("/send-bulk-withoutDetals")
+    public ResponseEntity<String> sendBulkwithoutDetails(@RequestParam("csv")  MultipartFile file,
+                                           @RequestParam("resume") MultipartFile resume,
+                                           @RequestParam("subject") String subject
+    ) throws Exception {
+        String response = bulkEmailSenderService.SendBulkEmailsWithoutDetails(file,resume,subject);
+        return ResponseEntity.ok(response);
+    }
+
+
 }
